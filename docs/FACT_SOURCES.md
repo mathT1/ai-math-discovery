@@ -49,7 +49,7 @@
 | M1 | 2×2 행렬 곱을 정의대로 계산하면 곱셈 8번, 덧셈 4번 | ✅ | 행렬 곱의 정의 (교과) |
 | M2 | 스트라센 방법: M₁=(a₁₁+a₂₂)(b₁₁+b₂₂), M₂=(a₂₁+a₂₂)b₁₁, M₃=a₁₁(b₁₂−b₂₂), M₄=a₂₂(b₂₁−b₁₁), M₅=(a₁₁+a₁₂)b₂₂, M₆=(a₂₁−a₁₁)(b₁₁+b₁₂), M₇=(a₁₂−a₂₂)(b₂₁+b₂₂); c₁₁=M₁+M₄−M₅+M₇, c₁₂=M₃+M₅, c₂₁=M₂+M₄, c₂₂=M₁−M₂+M₃+M₆ | 🔁 | 16칸 계수 배열 전개로 네 성분 모두 일치 확인 (2026-11-05, M3에서 `tests/`로 옮김) |
 | M3 | 스트라센 방법은 1969년 발표 | ✅ | Fawzi 외 (2022) 본문·Fig. 3 표 "(2, 2, 2) (Strassen, 1969) 7". 원 논문 서지(Antigravity 제공): V. Strassen, "Gaussian elimination is not optimal", *Numer. Math.* 13(4), 354–356 (1969), doi:10.1007/BF02165411 |
-| M4 | 2×2 행렬 곱에는 곱셈이 최소 7번 필요함이 증명되어 있음 | ⚠️ | 서지(Antigravity 제공, 본문 미열람): S. Winograd, "On multiplication of 2×2 matrices", *Linear Algebra Appl.* 4(4), 381–388 (1971), doi:10.1016/0024-3795(71)90009-7. 확인 전에는 "7번보다 줄일 수 없다고 알려져 있다"로 씀 |
+| M4 | 2×2 행렬 곱에는 곱셈이 최소 7번 필요함이 증명되어 있음 | ⚠️ | 서지는 Crossref로 확인(2026-11-06): S. Winograd, "On multiplication of 2 × 2 matrices", *Linear Algebra Appl.* 4(4), 381–388 (1971-10), doi:10.1016/0024-3795(71)90009-7. 본문은 유료라 미열람(검색 결과의 IBM Research 초록 요약에 "minimum number of multiplications required to multiply two 2 × 2 matrices is seven"). 본문 확인 전까지 화면에는 "7번보다 줄일 수 없다고 알려져 있다"로만 씀 (테스트로 "최소임이 증명" 문구 차단) |
 | M12 | 스트라센 방법은 곱셈 7번 대신 덧셈·뺄셈이 18번 (정의대로는 4번). 2×2 한 번만 계산하면 전체 연산은 오히려 많음. 이득은 큰 행렬을 블록으로 나눠 반복 적용할 때 생김 | 🔁 | M2 식에서 직접 셈: M₁~M₇ 안의 덧셈·뺄셈 10번 + c₁₁~c₂₂ 조합 8번 = 18번 (Antigravity M0 검토 제안) |
 | M5 | 논문: Fawzi 외, "Discovering faster matrix multiplication algorithms with reinforcement learning", *Nature* 610, 47–53 (2022), doi:10.1038/s41586-022-05172-4 | ✅ | DeepMind 공식 저장소 인용 정보 |
 | M6 | 4×4 행렬을 **mod 2 계산(ℤ₂)**에서 곱셈 47번으로. 스트라센을 두 번 적용하면 7²=49번. 4×4에서 스트라센 2단계 방법을 넘은 것은 1969년 이후 처음 | ✅ | Fawzi 외 (2022) 47쪽 초록·본문 "4 × 4 matrices using 47 multiplications in ℤ₂ … Strassen's two-level algorithm, which involves 7² = 49" |
@@ -57,7 +57,10 @@
 | M8 | n, m, p ≤ 12 범위에서 70개가 넘는 행렬 곱 크기의 기존 기록 개선 (작은 결과를 조합하는 방법 포함) | ✅ | 같은 논문 본문 "improve over the state-of-the-art results for more than 70 matrix multiplication tensors (with n, m, p ≤ 12)" |
 | M9 | 방법: 곱셈 방법 찾기를 1인용 게임 **TensorGame**으로 바꾸고, AlphaZero 기반 심층 강화학습 에이전트 AlphaTensor가 탐색. 매 단계 "행렬 원소를 어떻게 묶어 곱할지" 고르고, 적은 곱셈으로 끝낼수록 높은 점수 | ✅ | 같은 논문 초록·본문 |
 | M11 | 2×2에서 AlphaTensor가 찾은 최소 횟수도 **7번** (스트라센과 같음) → AI도 2×2는 줄이지 못함 | ✅ | 같은 논문 Fig. 3 표 (2, 2, 2): 7 / 7 / 7 |
-| M10 | 스트라센 방법을 큰 행렬에 반복 적용하면 곱셈 횟수가 N³ 대신 약 N^2.807 (=N^log₂7)로 늘어남 | ✅ | 계산: 크기를 절반으로 나눌 때마다 곱셈 8번→7번, log₂7 ≈ 2.807 |
+| M10 | 스트라센 방법을 큰 행렬에 반복 적용하면 곱셈 횟수가 N³ 대신 약 N^2.807 (=N^log₂7)로 늘어남 | ✅ | 계산: 크기를 절반으로 나눌 때마다 곱셈 8번→7번, log₂7 ≈ 2.807. 화면 표(N = 2~1024의 N³, 7ᵏ, 비율)는 프로그램이 계산 |
+| M13 | 스트라센 식의 블록은 모두 (a들의 일차결합) × (b들의 일차결합) 꼴이라, 성분이 행렬(곱의 순서를 바꿀 수 없음)이어도 성립 | 🔁 | M2 식의 모양: 어느 블록에서도 a가 왼쪽, b가 오른쪽. M3 모듈 [AI와 비교] 2에서 사용 |
+| M14 | 워밍업: P₁=(a+b)(c+d), P₂=ac, P₃=bd이면 ac − bd = P₂ − P₃, ad + bc = P₁ − P₂ − P₃ (곱셈 4번 → 3번) | 🔁 | 다항식 전개, `tests/matrix-mult.test.mjs` |
+| M15 | M₁~M₇은 서로 독립: −1, 0, 1 계수 3⁷가지를 모두 해 보면 각 성분을 만드는 조합은 하나뿐 → 네 성분이 모두 맞으면 곱셈은 반드시 7번 | 🔁 | `tests/matrix-mult.test.mjs` 전수 검사 (채점 `strassenOK`의 근거) |
 
 ---
 
@@ -65,7 +68,7 @@
 
 | 항목 | 할 일 | 시점 |
 |---|---|---|
-| M3, M4 | Strassen(1969) 서지, 2×2 최소 7번 증명(Winograd 1971 등) 원문 확인 | M3 시작 전 |
+| M4 | Winograd(1971) 본문 확인 (서지는 2026-11-06 Crossref로 확인). 확인되면 ✅로 바꾸고 "증명되어 있다"로 쓸 수 있음 | M4 마일스톤 전 (선택) |
 | N8, N9 | 1차 문헌 확인. 못 하면 "~로 알려져 있다 / 추측" 문장만 사용 | M2 중 |
 
 ## 5. 쓰지 않기로 한 문장 (P1)

@@ -103,9 +103,43 @@ try {
     const [x0, y0] = fx.split(',').map(Number);
     assert.equal(await evaluate('document.activeElement.dataset.x + "," + document.activeElement.dataset.y'), `${Math.min(5, x0 + 1)},${Math.min(5, y0 + 1)}`);
     ok('키보드 방향키 이동');
+    // M2 검토 ③-1: 6×6 성공 후 7×7로 바꿔 점 하나만 찍어도 6×6이 제출됨
+    await setValue('#n3l-size', 7);
+    await cellClick(0, 0);
+    assert.match(await evaluate('document.querySelector(".n3l-submit-note")?.textContent ?? ""'), /6×6/); ok('다른 격자로 바꾸면 "제출되는 결과: 6×6" 안내');
+  }
+  if (MODULE === 'matrix-mult') {
+    await click('탐구 활동');
+    // 1. 정의대로: 틀린 값 → 오류, 고치면 8번
+    for (const [i, v] of [19, 22, 43, 49].entries()) await setValue(`#mm-d${i}`, v);
+    assert.match(await evaluate('document.querySelector("#mm-d3").className'), /mm-wrong/); ok('정의대로: 틀린 칸 표시');
+    await setValue('#mm-d3', 50);
+    assert.match(await evaluate('document.body.textContent'), /곱셈 8번/); ok('정의대로: 곱셈 8번 안내');
+    const pick = (label, v) => evaluate(`(()=>{const s=document.querySelector('select[aria-label="${label}"]'); s.value='${v}'; s.dispatchEvent(new Event('change',{bubbles:true})); return true})()`);
+    // 2. 워밍업
+    for (const [k, t, cs] of [['w1', 'ac − bd', [0, 1, -1]], ['w2', 'ad + bc', [1, -1, -1]]])
+      for (let i = 0; i < 3; i++) if (cs[i]) await pick(`${t} 만들기: P${i + 1} 앞의 부호`, cs[i]);
+    assert.match(await evaluate('document.body.textContent'), /곱셈 3번으로 두 식을 모두/); ok('워밍업 두 식 완성');
+    // 3. 안내 모드: 잠긴 블록
+    assert.equal(await evaluate(`document.querySelector('select[aria-label="c₁₂ 만들기: M1 앞의 부호"]').disabled`), true); ok('안내 모드: 안 쓰는 블록 잠김');
+    const ans = { 'c₁₁': [1, 0, 0, 1, -1, 0, 1], 'c₁₂': [0, 0, 1, 0, 1, 0, 0], 'c₂₁': [0, 1, 0, 1, 0, 0, 0], 'c₂₂': [1, -1, 1, 0, 0, 1, 0] };
+    await pick('c₁₁ 만들기: M1 앞의 부호', 1);
+    assert.match(await evaluate('document.querySelector("#mm-c11").textContent'), /지워진 항|전개/); ok('조합하면 전개식 표시');
+    for (const [e, cs] of Object.entries(ans)) for (let k = 0; k < 7; k++) if (cs[k]) await pick(`${e} 만들기: M${k + 1} 앞의 부호`, cs[k]);
+    const txt = await evaluate('document.body.textContent');
+    assert.match(txt, /4 \/ 4 성분 완성/); assert.match(txt, /곱셈 7번 · 덧셈·뺄셈 18번/); ok('스트라센 4성분 완성: 곱셈 7, 덧셈·뺄셈 18');
+    assert.match(await evaluate('document.querySelector("#mm-c11").textContent'), /a₂₂b₂₂/); ok('지워진 항 표시 (c₁₁의 a₂₂b₂₂)');
+    // 도전 모드로 바꿔도 값 유지, 잠금 해제
+    await evaluate(`document.getElementById('mm-mode-free').click(); true`);
+    assert.equal(await evaluate(`document.querySelector('select[aria-label="c₁₂ 만들기: M1 앞의 부호"]').disabled`), false);
+    assert.match(await evaluate('document.body.textContent'), /4 \/ 4 성분 완성/); ok('도전 모드: 잠금 해제, 답 유지');
   }
   await click('AI와 비교');
   assert.equal(await evaluate('document.getElementById("compare-root").children.length > 0'), true); ok('AI 비교 화면');
+  if (MODULE === 'matrix-mult') {
+    const t = await evaluate('document.getElementById("compare-root").textContent');
+    assert.match(t, /47번/); assert.match(t, /mod 2/); assert.match(t, /알려져 있습니다/); assert.match(t, /나의 조합 \(4\/4 성분 완성\)/); ok('AI 비교: 47번·mod 2 주의·나의 조합');
+  }
   await click('정리');
   await evaluate(`document.querySelectorAll('[id^="q-"]').forEach(t=>{t.value='=SUM(A1) 짝지으면 11이 5쌍'; t.dispatchEvent(new Event('input'))}); true`);
   await click('결과물 제출');
@@ -117,6 +151,8 @@ try {
   const jsonName = files.find((f) => f.endsWith('.json'));
   const result = JSON.parse(await readFile(join(dl, jsonName), 'utf8'));
   assert.equal(result.student.name, '홍길동'); assert.match(result.checksum, /^sha256:/); ok('JSON 내용·체크섬');
+  if (MODULE === 'no-three-in-line') { assert.equal(result.payload.n, 6); assert.equal(result.payload.points.length, 12); ok('제출 파일 = 가장 잘한 6×6 보드'); }
+  if (MODULE === 'matrix-mult') { assert.deepEqual(result.payload.coefs.c22, [1, -1, 1, 0, 0, 1, 0]); assert.equal(result.payload.mode, 'free'); ok('제출 파일: 계수·방법'); }
   const png = await readFile(join(dl, files.find((f) => f.endsWith('.png'))));
   assert.ok(png.length > 20000); ok(`PNG 보고서 ${Math.round(png.length / 1024)}KB`);
 

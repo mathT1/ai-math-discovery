@@ -1,0 +1,42 @@
+{
+  "id": "matrix-mult",
+  "version": "1.0.0",
+  "status": "draft",
+  "title": "곱셈 한 번을 줄여라",
+  "subtitle": "2×2 행렬의 곱 — 스트라센의 7번, 그리고 AI AlphaTensor",
+  "subject": "공통수학1",
+  "unit": "행렬",
+  "topics": ["행렬의 곱셈", "전개와 소거", "알고리즘"],
+  "achievement_standards": [
+    {
+      "code": "10공수1-04-02",
+      "description": "행렬의 연산을 수행하고, 관련된 문제를 해결할 수 있다.",
+      "source": "2022 개정 교육과정에 따른 고등학교 수학과 공통과목 성취수준, PDF 15·16·39쪽 (해설: 행과 열의 수가 각각 2를 넘지 않는 범위)"
+    }
+  ],
+  "grade": ["고1"],
+  "periods": 2,
+  "difficulty": 3,
+  "paper": {
+    "title": "Discovering faster matrix multiplication algorithms with reinforcement learning",
+    "authors": "Alhussein Fawzi 외 (Google DeepMind)",
+    "year": 2022,
+    "url": "https://doi.org/10.1038/s41586-022-05172-4",
+    "code": "https://github.com/google-deepmind/alphatensor",
+    "ai_method": "곱셈 방법 찾기를 혼자 하는 게임(TensorGame)으로 바꾸고, AlphaZero 방식의 강화학습 AI(AlphaTensor)가 탐색",
+    "license_note": "이 모듈은 논문의 데이터를 쓰지 않음. 스트라센 블록은 교과 수준에서 직접 전개해 확인(tests/). 논문 결과(data/paper.json)는 본문·표의 수치를 요약."
+  },
+  "story": {
+    "hook": "2×2 행렬 두 개를 곱하려면 곱셈이 몇 번 필요할까요? 정의대로 하면 8번입니다. 1969년 스트라센은 이것을 7번으로 줄였습니다. 곱셈 한 번 줄인 것이 왜 대단할까요?",
+    "ai_connection": "2022년 AI AlphaTensor는 '곱셈 줄이기'를 게임처럼 풀어 4×4 행렬(mod 2 계산)의 곱셈을 49번에서 47번으로 줄였습니다. 직접 블록을 조립해 본 뒤 'AI와 비교'에서 확인해 봅시다."
+  },
+  "questions": [
+    { "id": "q1", "type": "text", "prompt": "스트라센 방법은 곱셈을 8번에서 7번으로 줄이는 대신 덧셈·뺄셈이 4번에서 18번으로 늘었습니다. 그런데도 큰 행렬에서 이득인 이유를 설명하시오." },
+    { "id": "q2", "type": "text", "prompt": "AI(AlphaTensor)가 무엇을 어떻게 했는지, 그리고 그 결과에 어떤 조건이 붙는지 설명하시오." }
+  ],
+  "data": {
+    "paper": "data/paper.json"
+  },
+  "style": "activity.css",
+  "authors": ["동규"]
+}

@@ -1,0 +1,15 @@
+{
+  "source": "Fawzi 외, \"Discovering faster matrix multiplication algorithms with reinforcement learning\", Nature 610, 47–53 (2022), doi:10.1038/s41586-022-05172-4 — docs/FACT_SOURCES.md M5–M9, M11",
+  "records": [
+    { "size": "2×2", "calc": "일반 계산", "before": "7번 (스트라센, 1969)", "ai": "7번", "note": "AI도 줄이지 못함" },
+    { "size": "4×4", "calc": "mod 2 계산", "before": "49번 (스트라센을 두 번 적용: 7² = 49)", "ai": "47번", "note": "1969년 이후 처음으로 줄임" },
+    { "size": "5×5", "calc": "mod 2 계산", "before": "98번", "ai": "96번", "note": "" },
+    { "size": "5×5", "calc": "일반 계산", "before": "98번", "ai": "98번", "note": "같음" }
+  ],
+  "more": "행·열의 수가 12 이하인 행렬 곱 가운데 70개가 넘는 크기에서 기존 최소 기록을 줄였습니다 (작은 결과를 조합한 경우 포함).",
+  "method": [
+    "곱셈 방법을 찾는 일을 혼자 하는 게임(TensorGame)으로 바꿨습니다.",
+    "게임의 한 수 = 행렬 성분을 어떻게 묶어 곱할지(블록 하나) 고르기. 적은 수로 끝낼수록 높은 점수를 받습니다.",
+    "바둑·체스를 스스로 익힌 AI(AlphaZero)와 같은 방식의 강화학습으로 AI(AlphaTensor)가 이 게임을 스스로 반복하며 배웠습니다."
+  ]
+}

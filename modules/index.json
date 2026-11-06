@@ -20,8 +20,27 @@
       "difficulty": 1
     },
     {
-      "id": "no-three-in-line",
+      "id": "matrix-mult",
       "status": "draft",
+      "version": "1.0.0",
+      "title": "곱셈 한 번을 줄여라",
+      "subtitle": "2×2 행렬의 곱 — 스트라센의 7번, 그리고 AI AlphaTensor",
+      "subject": "공통수학1",
+      "unit": "행렬",
+      "topics": [
+        "행렬의 곱셈",
+        "전개와 소거",
+        "알고리즘"
+      ],
+      "grade": [
+        "고1"
+      ],
+      "periods": 2,
+      "difficulty": 3
+    },
+    {
+      "id": "no-three-in-line",
+      "status": "published",
       "version": "1.0.0",
       "title": "세 점이 한 직선 위에 놓이지 않게",
       "subtitle": "격자 위에 점을 최대한 많이 — 사람, 고전 알고리즘, AI의 도전",

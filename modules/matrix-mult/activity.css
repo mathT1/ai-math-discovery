@@ -1,0 +1,35 @@
+/* matrix-mult 전용 스타일 — 색은 core/ui.css 변수 사용 */
+.mm-row { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin: 10px 0; }
+.mm-mat-wrap { display: flex; align-items: center; gap: 8px; }
+.mm-mat-label { font-weight: 800; font-size: 1.1rem; }
+.mm-mat { border-collapse: separate; border-spacing: 10px 4px; border-left: 3px solid var(--text); border-right: 3px solid var(--text); border-radius: 6px; }
+.mm-mat td { text-align: center; min-width: 2em; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.mm-grid2 { display: grid; grid-template-columns: repeat(2, 5.5em); gap: 6px; padding: 4px 8px; border-left: 3px solid var(--text); border-right: 3px solid var(--text); border-radius: 6px; }
+.mm-in { width: 100%; padding: 4px; min-height: 44px; font: inherit; font-size: 1.1rem; text-align: center; border: 2px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); }
+.mm-in.mm-wrong { border-color: var(--error); border-style: dashed; }
+
+.mm-blocks { padding-left: 1.2em; }
+.mm-table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+.mm-table th, .mm-table td { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; }
+.mm-table td.num, .mm-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.mm-mode { border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; margin: 14px 0; display: flex; flex-wrap: wrap; gap: 6px 20px; }
+.mm-mode label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; }
+.mm-mode input[type=radio] { width: 22px; height: 22px; min-height: 0; flex: none; margin: 0; padding: 0; }
+
+.mm-entries { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 12px; }
+.mm-entry { border: 2px solid var(--border); border-radius: var(--radius); padding: 10px 12px; background: var(--surface); }
+/* 완성된 성분: 색 + 굵은 실선 + ✓ 글자 (색만으로 구분하지 않음) */
+.mm-entry.mm-done { border-color: var(--ok, var(--primary)); border-width: 3px; }
+.mm-entry-head { margin-bottom: 8px; }
+.mm-sels { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.mm-sel { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; font-size: .85rem; }
+.mm-sel.mm-locked { opacity: .35; }
+.mm-coef { width: 46px; padding: 0 2px; min-width: 44px; min-height: 44px; font: inherit; font-size: 1.15rem; font-weight: 800; text-align: center; border: 2px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); }
+.mm-coef:disabled { cursor: not-allowed; }
+.mm-out { font-size: .95rem; line-height: 1.6; }
+.mm-out .mm-k { display: inline-block; min-width: 5.2em; color: var(--muted); font-size: .85rem; }
+.mm-out s { color: var(--muted); }
+.mm-terms { padding-left: 1.2em; }
+.mm-count { font-size: 1.1rem; }
+.mm-note { border-left: 4px solid var(--warn); padding: 6px 10px; background: var(--bg); }

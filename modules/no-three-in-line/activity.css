@@ -46,6 +46,8 @@
 .n3l-static .grid { stroke: var(--border); stroke-width: .02; }
 .n3l-static .dot { fill: var(--text); }
 .n3l-static .dot.bad { fill: var(--error); stroke: var(--text); stroke-width: .06; }
+.n3l-static .dot-box { fill: none; stroke: var(--text); stroke-width: .06; }
+.n3l-submit-note { border-left: 4px solid var(--primary); padding: 6px 10px; background: var(--bg); }
 .n3l-table { border-collapse: collapse; width: 100%; font-size: .92rem; }
 .n3l-table th, .n3l-table td { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; }
 .n3l-table td.num { text-align: right; font-variant-numeric: tabular-nums; }

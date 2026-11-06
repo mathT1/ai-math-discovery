@@ -2,6 +2,7 @@
 // 격자 칸 = 버튼 (키보드 방향키로 이동, Enter/Space로 점 찍기·지우기)
 // 공선은 색만이 아니라 점선 직선·'!' 표시·번호 목록으로 함께 알림 (접근성)
 import { cleanPoints, badLines, lineEnds, forbiddenCells, binom, formatBig } from './geometry.js';
+import { metrics } from './grader.js';
 
 const SIZES = [3, 4, 5, 6, 7, 8];
 const S = { n: 6, boards: {}, hint: false, focus: [0, 0] };
@@ -69,8 +70,28 @@ export function init(container, meta, data, ctx) {
   update(false);
 }
 
+/**
+ * 제출할 격자: 지금 화면의 격자보다 다른 격자의 성취가 더 높으면 그 격자를 냄 (M2 검토 ③-1)
+ * 비교 순서: 규칙 준수 → progress → 점 개수 → 지금 화면의 격자
+ */
+function bestBoard() {
+  const score = (n) => {
+    const v = metrics({ n, points: S.boards[n] ?? [] }).values;
+    return [v.ruleOK, v.progress, v.pointCount, n === S.n ? 1 : 0];
+  };
+  let best = S.n, bestKey = score(S.n);
+  for (const k of Object.keys(S.boards).map(Number)) {
+    if (!SIZES.includes(k) || k === S.n) continue;
+    const key = score(k);
+    const i = key.findIndex((v, j) => v !== bestKey[j]);
+    if (i >= 0 && key[i] > bestKey[i]) { best = k; bestKey = key; }
+  }
+  return best;
+}
+
 export function getResultData() {
-  return { n: S.n, points: points().map((p) => [p[0], p[1]]) };
+  const n = bestBoard();
+  return { n, points: (S.boards[n] ?? []).map((p) => [p[0], p[1]]) };
 }
 
 export function renderAIComparison(container, payload, data) {
@@ -249,8 +270,18 @@ function update(changed = true) {
     msg,
     bad.length ? h('ul', {}, bad.map((l) => h('li', {}, `점 ${l.points.map((k) => k + 1).join(', ')} — 기울기 ${l.slope}`))) : null,
     S.hint ? h('p', { class: 'muted small' }, `× 표시: 지금 점을 놓으면 세 점이 한 직선 위에 오는 곳 (${forbidden.size}곳)`) : null,
+    submitNote(),
   ].filter(Boolean));
   if (changed) notify();
+}
+
+/** 다른 격자가 제출될 때 알림 */
+function submitNote() {
+  const b = bestBoard();
+  if (b === S.n) return null;
+  return h('p', { class: 'n3l-submit-note' }, h('strong', {}, '제출되는 결과: '),
+    `${b}×${b} 격자 (점 ${S.boards[b].length}개). 지금 격자보다 더 잘한 결과를 자동으로 냅니다. `,
+    h('button', { type: 'button', class: 'btn ghost small', onclick: () => { S.n = b; S.focus = [0, 0]; update(); } }, `${b}×${b}로 돌아가기`));
 }
 
 function staticBoard(n, pts, bad) {
@@ -265,7 +296,10 @@ function staticBoard(n, pts, bad) {
     g.append(svg('line', { x1: a[0] + 0.5, y1: n - 1 - a[1] + 0.5, x2: b[0] + 0.5, y2: n - 1 - b[1] + 0.5, class: 'n3l-badline' }));
   }
   pts.forEach((p, i) => {
-    g.append(svg('circle', { cx: p[0] + 0.5, cy: n - 1 - p[1] + 0.5, r: 0.28, class: badSet.has(i) ? 'dot bad' : 'dot' }));
+    const x = p[0] + 0.5, y = n - 1 - p[1] + 0.5;
+    // 공선 점: 네모 테두리 (탐구 보드·PNG 보고서와 같은 표시) — M2 검토 ⑤-1
+    if (badSet.has(i)) g.append(svg('rect', { x: x - 0.4, y: y - 0.4, width: 0.8, height: 0.8, class: 'dot-box' }));
+    g.append(svg('circle', { cx: x, cy: y, r: 0.28, class: badSet.has(i) ? 'dot bad' : 'dot' }));
   });
   return g;
 }
