@@ -12,3 +12,6 @@ node_modules/
 
 # 배포 산출물 (Actions에서만 생성)
 _site/
+
+# 오프라인용 Service Worker (tools/build-index.mjs가 생성, Actions에서도 매번 생성)
+/sw.js

@@ -4,6 +4,9 @@ import { loadCatalog, moduleURL, showDrafts } from './catalog.js';
 import { validateResult } from './validate.js';
 import { verifyChecksum, decodeSubmissions, canCompress } from './codec.js';
 import { gradeRow, toCSV } from './grade.js';
+import { setupOffline } from './offline.js';
+
+setupOffline({ statusEl: document.getElementById('offline-status') });
 
 const ROOT = new URL('../', import.meta.url);
 const SOURCE_LABEL = { file: '파일', code: '제출 코드', print: '출력물', sample: '샘플' };
@@ -107,11 +110,25 @@ async function loadSamples() {
     const list = await fetchJSON(new URL(`samples/${ctx.meta.id}.json`, ROOT));
     const had = ctx.rows.some((r) => r.source === 'sample');
     ctx.rows = ctx.rows.filter((r) => r.source !== 'sample'); // 두 번 눌러도 중복되지 않게 교체
-    for (const r of list) await addResult(r, 'sample');
+    // 항목: 결과물 JSON 그대로, 또는 { result, teacher: { 항목id: 점수 } } (교사 점수를 미리 채운 시연용)
+    for (const item of list) {
+      const isWrapped = item && typeof item === 'object' && 'result' in item;
+      await addResult(isWrapped ? item.result : item, 'sample');
+      if (isWrapped && item.teacher && typeof item.teacher === 'object') {
+        const row = ctx.rows[ctx.rows.length - 1];
+        for (const it of ctx.rubric.items.filter((i) => i.type === 'teacher')) {
+          const v = item.teacher[it.id];
+          if (Number.isFinite(v) && v >= 0 && v <= it.max) row.manual[it.id] = v;
+        }
+      }
+    }
     render();
     toast(had ? `샘플 ${list.length}명을 다시 불러왔습니다 (이전 샘플은 교체).` : `샘플 ${list.length}명을 불러왔습니다.`);
-  } catch {
-    toast('이 모듈에는 샘플 학급 데이터가 아직 없습니다.', 'warn');
+  } catch (e) {
+    console.warn('샘플 불러오기 실패', e);
+    // 파일이 없을 때(404)와 다른 이유로 실패했을 때를 구분해서 알림
+    if (/\(404\)/.test(e?.message ?? '')) toast('이 모듈에는 샘플 학급 데이터가 아직 없습니다.', 'warn');
+    else toast(`샘플을 불러오지 못했습니다. 잠시 뒤 다시 눌러 보세요. (${e?.message ?? e})`, 'error');
   }
 }
 

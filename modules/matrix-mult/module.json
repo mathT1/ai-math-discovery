@@ -1,7 +1,7 @@
 {
   "id": "matrix-mult",
   "version": "1.0.0",
-  "status": "draft",
+  "status": "published",
   "title": "곱셈 한 번을 줄여라",
   "subtitle": "2×2 행렬의 곱 — 스트라센의 7번, 그리고 AI AlphaTensor",
   "subject": "공통수학1",

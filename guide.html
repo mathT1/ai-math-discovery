@@ -21,6 +21,8 @@
     import { markdownToHTML } from './core/markdown.js';
     import { renderMath } from './core/math.js';
     import { moduleURL } from './core/catalog.js';
+    import { setupOffline } from './core/offline.js';
+    setupOffline();
     const box = document.getElementById('guide');
     const id = new URLSearchParams(location.search).get('id') ?? '';
     try {

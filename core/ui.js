@@ -1,6 +1,6 @@
 // 화면 공통 도우미
 
-export const PLATFORM_VERSION = '0.1.0';
+export const PLATFORM_VERSION = '0.2.0';
 
 /** el('div', {class:'x', onclick: fn}, '글자', childEl) */
 export function el(tag, attrs = {}, ...children) {

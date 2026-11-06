@@ -1,6 +1,9 @@
 // 홈: 단원·주제·난이도로 모듈 찾기 [R1]
 import { el, showFatal } from './ui.js';
 import { loadCatalog, moduleURL, showDrafts } from './catalog.js';
+import { setupOffline } from './offline.js';
+
+setupOffline({ statusEl: document.getElementById('offline-status') });
 
 const stars = (n) => '★'.repeat(n) + '☆'.repeat(Math.max(0, 3 - n));
 

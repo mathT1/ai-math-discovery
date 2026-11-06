@@ -127,6 +127,10 @@ legend { font-weight: 700; padding: 0 6px; }
 .grade-table th { position: sticky; top: 0; background: var(--surface); font-size: .85rem; }
 .grade-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .grade-table select { min-width: 120px; min-height: 36px; padding: 4px; font-size: .85rem; }
+/* 반·번호·이름·출처·상태·총점·수준·버튼은 한 줄로 (글자가 한 자씩 세로로 쪼개지지 않게) */
+.grade-table td:nth-child(-n+5), .grade-table td:nth-last-child(-n+3) { white-space: nowrap; }
+.grade-table td:last-child .btn { margin: 2px 0; }
+.grade-table select { width: auto; max-width: 220px; }
 .score-input { width: 72px; min-height: 36px; padding: 4px; }
 .row-error td { color: var(--error); }
 .detail td { background: var(--bg); }
@@ -163,3 +167,11 @@ legend { font-weight: 700; padding: 0 6px; }
   .card { padding: 14px; }
   .step-nav .btn { flex: 1; }
 }
+
+/* 오프라인 준비 상태 · 새 버전 안내 (core/offline.js) */
+.offline-status { margin: 6px 0 0; }
+.offline-status[data-ready="1"] { color: var(--ok); }
+.sw-update { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 50; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  width: min(calc(100% - 32px), 640px); padding: 10px 14px; background: var(--surface); color: var(--text); border: 2px solid var(--primary); border-radius: var(--radius); box-shadow: 0 6px 24px rgba(0,0,0,.18); }
+.sw-update span { flex: 1 1 260px; }
+@media print { .sw-update, .offline-status { display: none !important; } }

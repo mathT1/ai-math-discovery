@@ -1,7 +1,9 @@
 // modules/*/module.json 을 모아 modules/index.json 생성 + 모듈 표준 검사 [D5]
+// + 오프라인용 /sw.js 생성 (tools/sw-template.js + 사이트 파일 목록 + 내용 해시) [D17]
 // 실행: node tools/build-index.mjs        (오류가 있으면 종료 코드 1 → Actions 배포 중단)
-//       node tools/build-index.mjs --check (검사만, index.json 쓰지 않음)
+//       node tools/build-index.mjs --check (검사만, index.json·sw.js 쓰지 않음)
 import { readdir, readFile, writeFile, stat } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -104,12 +106,57 @@ async function main() {
     for (const e of errors) console.error('  ✖ ' + e);
     process.exit(1);
   }
+  let swNote = '';
   if (!checkOnly) {
     const index = { generated_by: 'tools/build-index.mjs — 직접 고치지 마세요', modules };
     await writeFile(join(MODULES, 'index.json'), JSON.stringify(index, null, 2) + '\n');
+    const sw = await buildServiceWorker(dirs);
+    swNote = `, sw.js (주소 ${sw.count}개, 버전 ${sw.version})`;
   }
   const pub = modules.filter((m) => m.status === 'published').length;
-  console.log(`모듈 ${modules.length}개 검사 통과 (공개 ${pub}, 만드는 중 ${modules.length - pub})${checkOnly ? '' : ' → modules/index.json'}`);
+  console.log(`모듈 ${modules.length}개 검사 통과 (공개 ${pub}, 만드는 중 ${modules.length - pub})${checkOnly ? '' : ' → modules/index.json' + swNote}`);
+}
+
+// ---------- 오프라인 (Service Worker) ----------
+
+// 배포되는 사이트 파일 중 미리 저장할 것 (docs·tools·tests 등은 배포되지 않으므로 넣지 않음)
+const PRECACHE_DIRS = ['core', 'vendor', 'modules', 'samples'];
+const PRECACHE_ROOT_FILES = ['index.html', 'teacher.html', 'guide.html'];
+const SKIP = /(^|\/)(\.|Thumbs\.db$|desktop\.ini$)/;
+
+async function walk(rel) {
+  const out = [];
+  let entries;
+  try { entries = await readdir(join(ROOT, rel), { withFileTypes: true }); } catch { return out; }
+  for (const e of entries) {
+    const p = `${rel}/${e.name}`;
+    if (SKIP.test(p)) continue;
+    if (e.isDirectory()) out.push(...await walk(p)); else out.push(p);
+  }
+  return out;
+}
+
+async function buildServiceWorker(moduleDirs) {
+  const files = [...PRECACHE_ROOT_FILES];
+  for (const d of PRECACHE_DIRS) files.push(...await walk(d));
+  files.sort();
+  const template = await readFile(join(ROOT, 'tools', 'sw-template.js'), 'utf8');
+  const hash = createHash('sha256');
+  hash.update(template);
+  for (const f of files) {
+    hash.update(f + '\0');
+    // 줄바꿈 차이(CRLF/LF)로 버전이 달라지지 않게 글자 파일은 LF로 맞춰 해시
+    const buf = await readFile(join(ROOT, f));
+    hash.update(/\.(woff2|png|ico)$/.test(f) ? buf : buf.toString('utf8').replace(/\r\n/g, '\n'));
+  }
+  const ui = await readFile(join(ROOT, 'core', 'ui.js'), 'utf8');
+  const platform = ui.match(/PLATFORM_VERSION\s*=\s*'([^']+)'/)?.[1] ?? '0';
+  const version = `${platform}-${hash.digest('hex').slice(0, 10)}`;
+  // 폴더 주소(./, modules/<id>/)도 넣어야 주소창 그대로 오프라인에서 열림
+  const urls = ['./', ...moduleDirs.map((d) => `modules/${d}/`), ...files];
+  const sw = template.replace("'__VERSION__'", JSON.stringify(version)).replace('__FILES__', JSON.stringify(urls, null, 1));
+  await writeFile(join(ROOT, 'sw.js'), sw);
+  return { version, count: urls.length };
 }
 
 main();

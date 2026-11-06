@@ -12,6 +12,9 @@ import { buildResult, encodeSubmission, canCompress } from './codec.js';
 import { loadDraft, saveDraft, clearDraft, purgeOldDrafts } from './storage.js';
 import { renderMath } from './math.js';
 import { drawReport, canvasToBlob } from './report.js';
+import { setupOffline } from './offline.js';
+
+setupOffline();
 
 const ROOT = new URL('../', import.meta.url);
 const BASE = new URL('./', location.href);
