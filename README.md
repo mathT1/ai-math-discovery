@@ -9,7 +9,7 @@ AI가 수학 난제를 탐구한 실제 연구 논문을 바탕으로 만든, �
 - 한 번 접속해 두면 인터넷이 끊겨도 동작 (현장 시연·불안정한 학교망)
 - 교사 연수·시연용 샘플 학급(30명) 데이터 포함
 
-> 현재 상태: **개발 중 (M4 품질·오프라인 — 모듈 2개 공개)**. 계획은 [`docs/FINAL_PLAN.md`](docs/FINAL_PLAN.md), 기기 점검·시연 절차는 [`docs/DEVICE_CHECK.md`](docs/DEVICE_CHECK.md) 참고.
+> 현재 상태: **출품 준비 (M5) — 모듈 2개 공개, 기기 점검 후 v1.0.0**. 계획은 [`docs/FINAL_PLAN.md`](docs/FINAL_PLAN.md), 기기 점검·시연 절차는 [`docs/DEVICE_CHECK.md`](docs/DEVICE_CHECK.md) 참고.
 
 ## 첫 버전 모듈
 
@@ -29,6 +29,9 @@ node tools/make-samples.mjs     # 샘플 학급 데이터 다시 만들기 (samp
 node --test "tests/*.test.mjs"  # 단위 테스트
 node tests/e2e-browser.mjs [모듈id]  # 브라우저 종단 테스트 (Chrome, 미리보기 서버 실행 중일 때)
 node tests/e2e-offline.mjs      # 오프라인 종단 테스트 (서버를 직접 띄웠다 끔)
+node tests/e2e-bulk.mjs         # 일괄 채점 40명 (미리보기 서버 실행 중일 때)
+node tools/exhibition/capture.mjs       # 출품용 화면 사진·지도안 PDF
+node tools/exhibition/record-demo.mjs   # 시연 영상 (Python + opencv-python 필요)
 ```
 
 미리보기(localhost)에서는 고친 파일이 바로 보이도록 오프라인 저장이 꺼져 있습니다. 시험하려면 주소 끝에 `?sw=1`을 붙이세요.

@@ -161,10 +161,10 @@ async function mm() {
   };
   const profiles = [];
   for (let k = 0; k < 7; k++) profiles.push({ mode: 'free', coefs: right(), base: 30 });
-  for (let k = 0; k < 6; k++) profiles.push({ mode: 'guided', coefs: right(), base: k < 3 ? 30 : 20 });
-  for (let k = 0; k < 6; k++) { const c = right(); const e = k % 2 ? 'c22' : 'c11'; c[e] = [...pick(wrongs[e], r)]; profiles.push({ mode: k < 3 ? 'guided' : 'free', coefs: c, base: 20 }); }
-  for (let k = 0; k < 5; k++) { const c = right(); c.c11 = k % 2 ? zero() : [...pick(wrongs.c11, r)]; c.c22 = k % 3 ? zero() : [...pick(wrongs.c22, r)]; profiles.push({ mode: 'guided', coefs: c, base: 10 }); }
-  for (let k = 0; k < 4; k++) { const c = { c11: zero(), c12: [...ANSWER.c12], c21: [...pick(wrongs.c21, r)], c22: zero() }; profiles.push({ mode: 'guided', coefs: c, base: 10 }); }
+  for (let k = 0; k < 6; k++) profiles.push({ mode: 'guided', coefs: right(), base: k < 3 ? 30 : k < 5 ? 20 : 10 });
+  for (let k = 0; k < 8; k++) { const c = right(); const e = k % 2 ? 'c22' : 'c11'; c[e] = [...pick(wrongs[e], r)]; profiles.push({ mode: k < 3 ? 'guided' : 'free', coefs: c, base: 20 }); }
+  for (let k = 0; k < 5; k++) { const c = right(); c.c11 = k % 2 ? zero() : [...pick(wrongs.c11, r)]; c.c22 = k % 3 ? zero() : [...pick(wrongs.c22, r)]; profiles.push({ mode: 'guided', coefs: c, base: k < 3 ? 20 : 10 }); }
+  for (let k = 0; k < 2; k++) { const c = { c11: zero(), c12: [...ANSWER.c12], c21: [...pick(wrongs.c21, r)], c22: zero() }; profiles.push({ mode: 'guided', coefs: c, base: 10 }); }
   profiles.push({ mode: 'guided', coefs: { c11: zero(), c12: zero(), c21: zero(), c22: zero() }, base: 0 });
   profiles.push({ mode: 'guided', coefs: { c11: [1, 0, 0, 1, 0, 0, 0], c12: [...wrongs.c12[0]], c21: zero(), c22: zero() }, base: 0 });
   if (profiles.length !== 30) throw new Error(`mm 샘플 수 ${profiles.length}`);

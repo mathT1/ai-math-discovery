@@ -125,12 +125,13 @@ legend { font-weight: 700; padding: 0 6px; }
 .grade-table { border-collapse: collapse; width: 100%; font-size: .92rem; }
 .grade-table th, .grade-table td { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: middle; }
 .grade-table th { position: sticky; top: 0; background: var(--surface); font-size: .85rem; }
+.grade-table th { word-break: keep-all; } /* 머리글이 한 글자씩 쪼개지지 않게 (낱말 단위로 줄바꿈) */
 .grade-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .grade-table select { min-width: 120px; min-height: 36px; padding: 4px; font-size: .85rem; }
 /* 반·번호·이름·출처·상태·총점·수준·버튼은 한 줄로 (글자가 한 자씩 세로로 쪼개지지 않게) */
-.grade-table td:nth-child(-n+5), .grade-table td:nth-last-child(-n+3) { white-space: nowrap; }
+.grade-table tr:not(.detail) > td:nth-child(-n+5), .grade-table tr:not(.detail) > td:nth-last-child(-n+3) { white-space: nowrap; } /* 답 보기 줄(.detail)은 줄바꿈 */
 .grade-table td:last-child .btn { margin: 2px 0; }
-.grade-table select { width: auto; max-width: 220px; }
+.grade-table select { width: auto; max-width: 190px; }
 .score-input { width: 72px; min-height: 36px; padding: 4px; }
 .row-error td { color: var(--error); }
 .detail td { background: var(--bg); }

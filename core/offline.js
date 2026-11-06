@@ -13,7 +13,10 @@ export function setupOffline({ statusEl = null } = {}) {
     navigator.serviceWorker.getRegistrations().then(async (regs) => {
       for (const r of regs) await r.unregister();
       for (const k of await caches.keys()) if (k.startsWith('aimath-')) await caches.delete(k);
-      show(statusEl, regs.length ? '오프라인 저장을 해제했습니다. 한 번 더 새로고침하면 인터넷에서 새로 받습니다.' : '오프라인 저장: 꺼짐 (?nosw)');
+      // 주소창에서 ?nosw를 지워, 그냥 새로고침만 해도 다시 저장되게 함 (M4 검토 ①)
+      q.delete('nosw');
+      history.replaceState(null, '', location.pathname + (q.toString() ? `?${q}` : '') + location.hash);
+      show(statusEl, regs.length ? '오프라인 저장을 해제했습니다. 새로고침하면 인터넷에서 새로 받아 다시 저장합니다.' : '오프라인 저장: 꺼짐 (?nosw)');
     });
     return;
   }

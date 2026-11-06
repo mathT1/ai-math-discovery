@@ -15,3 +15,6 @@ _site/
 
 # 오프라인용 Service Worker (tools/build-index.mjs가 생성, Actions에서도 매번 생성)
 /sw.js
+
+# 출품 자료 생성물 (tools/exhibition/*.mjs) — 용량이 커서 올리지 않음
+/out/
