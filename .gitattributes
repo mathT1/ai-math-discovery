@@ -1,0 +1,4 @@
+# 모든 텍스트 파일을 LF로 저장 (Windows·GitHub Actions 공통)
+* text=auto eol=lf
+*.pdf binary
+*.png binary

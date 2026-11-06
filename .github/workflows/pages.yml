@@ -1,0 +1,58 @@
+# main에 push하면: 모듈 검사·테스트 → 통과 시 GitHub Pages 배포
+# (tools/build-index.mjs, tests/ 는 M1에서 추가됨. 없으면 해당 단계는 건너뜀)
+name: Check and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 모듈 목록 생성 + 표준 검사
+        run: |
+          if [ -f tools/build-index.mjs ]; then node tools/build-index.mjs; else echo "build-index 없음 (M1 전)"; fi
+
+      - name: 수학 판정·데이터 테스트
+        run: |
+          if [ -d tests ]; then node --test tests/; else echo "tests 없음 (M1 전)"; fi
+
+      - name: 배포 파일 모으기 (문서·실험·도구 제외)
+        run: |
+          mkdir -p _site
+          rsync -a ./ _site/ \
+            --exclude '.git' --exclude '.github' --exclude '_site' \
+            --exclude 'docs' --exclude 'sandbox' --exclude 'tools' --exclude 'tests' \
+            --exclude '*.pdf' --exclude 'CLAUDE.md' --exclude 'AGENTS.md'
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

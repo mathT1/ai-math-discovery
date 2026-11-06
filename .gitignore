@@ -1,0 +1,14 @@
+# 참고용 교육과정 PDF: 저작권·용량(약 40MB) 때문에 저장소에 올리지 않음. 로컬에만 보관.
+/*.pdf
+
+# OS·편집기
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+
+# 혹시 생길 수 있는 의존성 폴더 (이 프로젝트는 npm을 쓰지 않음)
+node_modules/
+
+# 배포 산출물 (Actions에서만 생성)
+_site/
