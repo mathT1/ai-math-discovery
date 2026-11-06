@@ -78,6 +78,32 @@ try {
     await click('탐구 활동');
     await setValue('#tpl-n', 10); await setValue('#tpl-answer', 55);
   }
+  if (MODULE === 'no-three-in-line') {
+    await click('탐구 활동');
+    await setValue('#n3l-size', 6);
+    const cellClick = (x, y) => evaluate(`document.querySelector('.n3l-pt[data-x="${x}"][data-y="${y}"]').click(); true`);
+    // 공선 만들기: (0,0) (2,1) (4,2) — 기울기 1/2
+    for (const [x, y] of [[0, 0], [2, 1], [4, 2]]) await cellClick(x, y);
+    assert.equal(await evaluate('document.querySelectorAll(".n3l-pt.bad").length'), 3);
+    assert.equal(await evaluate('document.querySelectorAll(".n3l-lines line").length'), 1);
+    assert.match(await evaluate('document.querySelector(".n3l-status").textContent'), /기울기 1\/2/); ok('공선 표시 (점선·! 표시·기울기 1/2 목록)');
+    for (const [x, y] of [[0, 0], [2, 1], [4, 2]]) await cellClick(x, y); // 지우기
+    assert.equal(await evaluate('document.querySelectorAll(".n3l-pt.on").length'), 0); ok('다시 눌러 지우기');
+    const sol = JSON.parse(await (await fetch(`${BASE}/modules/no-three-in-line/data/solutions.json`)).text()).solutions['6'];
+    for (const [x, y] of sol) await cellClick(x, y);
+    assert.match(await evaluate('document.querySelector(".n3l-status").textContent'), /성공/); ok('6×6에 12개 → 성공');
+    await click('힌트: 놓을 수 없는 곳 보기');
+    assert.ok(await evaluate('document.querySelectorAll(".n3l-pt.forbidden").length') > 0); ok('힌트: 금지 칸 표시');
+    // 키보드: (0,0)으로 포커스 → 오른쪽·위 화살표 → (1,1)
+    await evaluate(`(()=>{const b=document.querySelector('.n3l-pt[data-x="0"][data-y="0"]'); b.focus(); const bd=document.querySelector('.n3l-board');
+      bd.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft',bubbles:true}));
+      return true})()`);
+    const fx = await evaluate('document.activeElement.dataset.x + "," + document.activeElement.dataset.y');
+    await evaluate(`(()=>{const bd=document.querySelector('.n3l-board'); for (const k of ['ArrowRight','ArrowUp']) bd.dispatchEvent(new KeyboardEvent('keydown',{key:k,bubbles:true})); return true})()`);
+    const [x0, y0] = fx.split(',').map(Number);
+    assert.equal(await evaluate('document.activeElement.dataset.x + "," + document.activeElement.dataset.y'), `${Math.min(5, x0 + 1)},${Math.min(5, y0 + 1)}`);
+    ok('키보드 방향키 이동');
+  }
   await click('AI와 비교');
   assert.equal(await evaluate('document.getElementById("compare-root").children.length > 0'), true); ok('AI 비교 화면');
   await click('정리');

@@ -1,0 +1,9 @@
+{
+  "source": "Ramanathan 외, arXiv:2512.11469 (2025-12) 초록 — docs/FACT_SOURCES.md N4–N7",
+  "methods": [
+    { "name": "정수선형계획법 (ILP)", "kind": "고전적 최적화", "result": "19×19까지 최적임을 증명" },
+    { "name": "PatternBoost", "kind": "AI (트랜스포머 학습)", "result": "14×14까지 최적과 같은 결과" },
+    { "name": "PPO", "kind": "AI (강화학습)", "result": "10×10까지 완벽, 11×11에서 실패" }
+  ],
+  "conclusion": "정확한 답을 얻는 데에는 고전적 최적화가 여전히 필요하고, AI 방법은 작은 격자에서 경쟁력이 있으며, 더 큰 격자에는 두 방법을 결합하는 것이 유망하다."
+}

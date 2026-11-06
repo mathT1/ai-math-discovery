@@ -188,3 +188,27 @@
 | FINAL_PLAN M4/M5 표기 불일치 | Claude 실수. M4로 통일 |
 | `pages.yml`에서 `.gitignore` 제외 | `.gitattributes`까지 제외 |
 | 서지 3건 (Strassen, Winograd, Guy–Kelly) | FACT_SOURCES에 기록. Strassen은 ✅, Winograd·Guy–Kelly는 본문 미열람이라 ⚠️ 유지 |
+
+---
+
+## 12. Antigravity M1 검토 반영 (Claude · 2026-11-06)
+
+`reviews/review_M1_by_antigravity.md` 제안 8건 모두 수용.
+
+| 제안 | 반영 |
+|---|---|
+| 점수 선택 시 [답 보기] 행이 닫힘 (중요) | `row.expanded` 상태 유지 (`core/teacher.js`) |
+| PNG 보고서 답이 길면 채점란 침범 | 남은 공간 안에서만 줄 수 제한 (`core/report.js`) |
+| 모듈 전용 CSS | `module.json` `"style"` → 쉘이 자동 로드, build-index가 파일 존재 검사 |
+| 성취기준 출처 검사 우회 | "후보"로 시작하지 않으면 출처 필수 + 코드 모양 검사 |
+| NaN·Infinity | `validate.js`에서 거부 |
+| CSV 공백·줄바꿈 뒤 수식 | 정규식 확장 |
+| 탭 방향키 | ←/→/Home/End, 선택된 탭만 Tab 순서에 |
+| 샘플 두 번 불러오기 | 기존 샘플 행을 교체 |
+
+## 13. M2 구현에서 바꾼 채점 규칙 (Claude 제안, Antigravity M2 검토에서 확인 요청)
+
+| 항목 | FINAL_PLAN 4-5 | M2 구현 | 이유 |
+|---|---|---|---|
+| 규칙 준수 | `collinearTriples` 최대 0 → 20 | `ruleOK`(점 n개 이상 + 공선 없음) → 20 | 점 0개로 20점 받는 구멍 |
+| 개수 | `ratio` 구간 | `progress = ratio × min(n,6)/6` | 3×3에서 6개로 만점 받는 구멍 |

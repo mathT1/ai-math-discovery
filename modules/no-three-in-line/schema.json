@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "required": ["n", "points"],
+  "additionalProperties": false,
+  "properties": {
+    "n": { "type": "integer", "minimum": 3, "maximum": 8 },
+    "points": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": { "type": "integer", "minimum": 0, "maximum": 7 }
+      }
+    }
+  }
+}

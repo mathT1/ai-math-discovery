@@ -1,0 +1,48 @@
+{
+  "id": "no-three-in-line",
+  "version": "1.0.0",
+  "status": "draft",
+  "title": "세 점이 한 직선 위에 놓이지 않게",
+  "subtitle": "격자 위에 점을 최대한 많이 — 사람, 고전 알고리즘, AI의 도전",
+  "subject": "공통수학2",
+  "unit": "도형의 방정식",
+  "topics": ["기울기", "공선", "경우의 수"],
+  "achievement_standards": [
+    {
+      "code": "10공수2-01-02",
+      "description": "두 직선의 평행 조건과 수직 조건을 탐구하고 이해한다.",
+      "source": "2022 개정 교육과정에 따른 고등학교 수학과 공통과목 성취수준, PDF 119·136쪽"
+    },
+    {
+      "code": "10공수1-03-01",
+      "description": "합의 법칙과 곱의 법칙을 이해하고, 적절한 전략을 사용하여 경우의 수와 관련된 문제를 해결할 수 있다.",
+      "source": "2022 개정 교육과정에 따른 고등학교 수학과 공통과목 성취수준, PDF 38쪽"
+    }
+  ],
+  "grade": ["고1"],
+  "periods": 1,
+  "difficulty": 2,
+  "paper": {
+    "title": "Three methods, one problem: Classical and AI approaches to no-three-in-line",
+    "authors": "Pranav Ramanathan, Thomas Prellberg, Matthew Lewis, Prathamesh Dinesh Joshi, Raj Abhijit Dandekar, Rajat Dandekar, Sreedath Panat",
+    "year": 2025,
+    "url": "https://arxiv.org/abs/2512.11469",
+    "code": "https://github.com/pranav-ramanathan/N3L_PatternBoost",
+    "ai_method": "정수선형계획법(ILP, 고전) · PatternBoost(트랜스포머 학습) · 강화학습(PPO)을 같은 문제에 적용해 비교",
+    "license_note": "이 모듈은 논문의 데이터를 쓰지 않음. 비교용 배치(data/solutions.json)는 직접 탐색·검증해 만듦. 논문 결과(data/paper.json)는 초록의 문장을 요약."
+  },
+  "story": {
+    "hook": "격자 위에 점을 찍는데, 어느 세 점도 한 직선 위에 있으면 안 됩니다. 6×6 격자에는 점을 최대 몇 개까지 찍을 수 있을까요?",
+    "ai_connection": "2025년 연구자들은 이 문제를 고전적인 최적화 방법(정수선형계획법)과 두 가지 AI 방법(트랜스포머 학습 PatternBoost, 강화학습 PPO)으로 풀어 보고 결과를 비교했습니다. 어느 쪽이 더 큰 격자까지 풀었을까요? 직접 도전한 뒤 'AI와 비교'에서 확인해 봅시다."
+  },
+  "questions": [
+    { "id": "q1", "type": "text", "prompt": "서로 다른 세 점 A(x₁, y₁), B(x₂, y₂), C(x₃, y₃)가 한 직선 위에 있는지 좌표로 판정하는 방법을 기울기를 이용해 설명하시오." },
+    { "id": "q2", "type": "text", "prompt": "n×n 격자에 조건을 지키며 점을 2n개보다 많이 찍을 수 없는 이유를 설명하시오." }
+  ],
+  "data": {
+    "solutions": "data/solutions.json",
+    "paper": "data/paper.json"
+  },
+  "style": "activity.css",
+  "authors": ["동규"]
+}
