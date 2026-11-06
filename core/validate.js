@@ -5,7 +5,7 @@
 const typeOf = (v) => {
   if (v === null) return 'null';
   if (Array.isArray(v)) return 'array';
-  if (typeof v === 'number') return Number.isInteger(v) ? 'integer' : 'number';
+  if (typeof v === 'number') return !Number.isFinite(v) ? 'nan' : Number.isInteger(v) ? 'integer' : 'number';
   return typeof v;
 };
 

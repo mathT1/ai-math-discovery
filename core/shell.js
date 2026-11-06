@@ -44,6 +44,10 @@ async function loadModule() {
   ]);
   const data = {};
   for (const [key, path] of Object.entries(meta.data ?? {})) data[key] = await fetchJSON(new URL(path, BASE));
+  if (meta.style) {
+    // 모듈 전용 스타일 (module.json "style": "activity.css") — Antigravity M1 검토
+    document.head.append(el('link', { rel: 'stylesheet', href: new URL(meta.style, BASE).href }));
+  }
   return { meta, activity, grader, data };
 }
 
@@ -76,10 +80,19 @@ function header() {
 }
 
 function tabBar() {
-  return el('nav', { class: 'tabs', role: 'tablist', 'aria-label': '수업 단계' },
+  // 좌우 방향키·Home·End로 단계 이동 (WAI-ARIA tablist 관례, Antigravity M1 검토)
+  const onkeydown = (e) => {
+    const i = TABS.findIndex((t) => t.id === state.tab);
+    const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: TABS.length - 1 }[e.key];
+    if (next === undefined || next < 0 || next >= TABS.length) return;
+    e.preventDefault();
+    showTab(TABS[next].id);
+  };
+  return el('nav', { class: 'tabs', role: 'tablist', 'aria-label': '수업 단계', onkeydown },
     TABS.map((t, i) => el('button', {
       type: 'button', role: 'tab', id: `tab-${t.id}`, 'aria-controls': `panel-${t.id}`,
-      'aria-selected': String(state.tab === t.id), class: 'tab', onclick: () => showTab(t.id),
+      'aria-selected': String(state.tab === t.id), tabindex: state.tab === t.id ? '0' : '-1',
+      class: 'tab', onclick: () => showTab(t.id),
     }, el('span', { class: 'step' }, String(i + 1)), t.label)));
 }
 
@@ -90,6 +103,7 @@ function showTab(id) {
     const panel = document.getElementById(`panel-${t.id}`);
     const on = t.id === id;
     btn.setAttribute('aria-selected', String(on));
+    btn.tabIndex = on ? 0 : -1;
     panel.hidden = !on;
   }
   if (id === 'compare') renderCompare();

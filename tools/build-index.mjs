@@ -31,12 +31,19 @@ async function checkModule(dir, errors) {
   if (!Number.isInteger(meta.difficulty) || meta.difficulty < 1 || meta.difficulty > 3) where('difficulty는 1~3 정수입니다.');
   if (!Array.isArray(meta.topics) || !meta.topics.length) where('topics가 비어 있습니다.');
 
-  // 성취기준: 확정 코드에는 출처(source)가 꼭 있어야 함 [D21]
+  // 성취기준: "후보"가 아닌 코드에는 출처(source)가 꼭 있어야 함 [D21]
+  // (코드 모양을 바꿔 적어도 빠져나가지 못하게 — Antigravity M1 검토)
   for (const a of meta.achievement_standards ?? []) {
-    if (STANDARD_CODE.test(a.code ?? '') && !String(a.source ?? '').trim()) {
-      where(`성취기준 [${a.code}] 에 출처(source: 문서명·쪽)가 없습니다. 출처가 없으면 "후보(확인 필요)"로 적으세요.`);
+    const code = String(a.code ?? '').trim();
+    const candidate = code.startsWith('후보');
+    if (!candidate && !String(a.source ?? '').trim()) {
+      where(`성취기준 [${code}] 에 출처(source: 문서명·쪽)가 없습니다. 출처가 없으면 "후보(확인 필요)"로 적으세요.`);
+    }
+    if (!candidate && !STANDARD_CODE.test(code)) {
+      where(`성취기준 코드 "${code}" 의 모양이 올바르지 않습니다 (예: 10공수2-01-02). 대괄호·설명은 빼고 코드만 적으세요.`);
     }
   }
+  if (meta.style && !(await exists(join(base, meta.style)))) where(`style 파일(${meta.style})이 없습니다.`);
   for (const [k, p] of Object.entries(meta.data ?? {})) {
     if (!(await exists(join(base, p)))) where(`data.${k} 파일(${p})이 없습니다.`);
   }

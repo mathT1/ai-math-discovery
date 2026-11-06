@@ -96,15 +96,17 @@ export function drawReport({ meta, result, evidence = [], drawSummary }) {
   const qs = meta.questions ?? [];
   const room = H - 300 - y; // 아래 채점란 자리 남기기
   const perQ = qs.length ? Math.max(3, Math.floor(room / qs.length / 32) - 2) : 0;
+  const boxY = H - 220; // 교사 채점란 위치
   for (const q of qs) {
+    if (y > boxY - 70) break; // 자리가 없으면 그만 (채점란 침범 방지)
     ctx.font = `bold 23px ${FONT}`;
     y = drawText(ctx, `Q. ${q.prompt}`, M, y, W - 2 * M, 30, 2);
     ctx.font = `23px ${FONT}`;
-    y = drawText(ctx, result.reflections?.[q.id] || '(미작성)', M + 24, y + 4, W - 2 * M - 24, 31, perQ) + 16;
+    const fit = Math.max(1, Math.min(perQ, Math.floor((boxY - 20 - (y + 4)) / 31))); // 남은 공간 안에서만 (Antigravity M1 검토)
+    y = drawText(ctx, result.reflections?.[q.id] || '(미작성)', M + 24, y + 4, W - 2 * M - 24, 31, fit) + 16;
   }
 
   // 교사 채점란 (출력물 제출용)
-  const boxY = H - 220;
   ctx.strokeStyle = '#111111';
   ctx.lineWidth = 2;
   ctx.strokeRect(M, boxY, W - 2 * M, 110);

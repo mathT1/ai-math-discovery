@@ -105,9 +105,11 @@ function addManual(cls, number, name) {
 async function loadSamples() {
   try {
     const list = await fetchJSON(new URL(`samples/${ctx.meta.id}.json`, ROOT));
+    const had = ctx.rows.some((r) => r.source === 'sample');
+    ctx.rows = ctx.rows.filter((r) => r.source !== 'sample'); // 두 번 눌러도 중복되지 않게 교체
     for (const r of list) await addResult(r, 'sample');
     render();
-    toast(`샘플 ${list.length}명을 불러왔습니다.`);
+    toast(had ? `샘플 ${list.length}명을 다시 불러왔습니다 (이전 샘플은 교체).` : `샘플 ${list.length}명을 불러왔습니다.`);
   } catch {
     toast('이 모듈에는 샘플 학급 데이터가 아직 없습니다.', 'warn');
   }
@@ -184,9 +186,11 @@ function render() {
     }
     const g = gradeOf(row);
     const st = STATUS[row.status] ?? STATUS.ok;
-    const answersBtn = el('button', { class: 'btn small ghost', type: 'button', onclick: (e) => {
-      const tr = e.currentTarget.closest('tr').nextElementSibling;
-      tr.hidden = !tr.hidden;
+    // 펼침 상태를 row에 저장 → 점수를 바꿔 표를 다시 그려도 답안이 닫히지 않음 (Antigravity M1 검토)
+    const answersBtn = el('button', { class: 'btn small ghost', type: 'button', 'aria-expanded': String(!!row.expanded), onclick: (e) => {
+      row.expanded = !row.expanded;
+      e.currentTarget.setAttribute('aria-expanded', String(row.expanded));
+      e.currentTarget.closest('tr').nextElementSibling.hidden = !row.expanded;
     } }, '답 보기');
     const main = el('tr', {},
       el('td', {}, s.class), el('td', { class: 'num' }, String(s.number)), el('td', {}, s.name || ''),
@@ -198,7 +202,7 @@ function render() {
       el('td', { class: 'num' }, el('strong', {}, g.level), g.complete ? null : el('span', { class: 'muted small', title: '채점하지 않은 항목이 있음' }, ' (미완)')),
       el('td', {}, row.source === 'print' ? null : answersBtn, remove));
     const qs = ctx.meta.questions ?? [];
-    const detail = el('tr', { class: 'detail', hidden: true },
+    const detail = el('tr', { class: 'detail', hidden: !row.expanded },
       el('td', { colspan: 5 + items.length + 3 },
         row.evidence.length ? el('p', { class: 'small' }, '다시 계산한 결과: ', row.evidence.join(' · ')) : null,
         qs.map((q) => el('div', { class: 'answer' }, el('strong', {}, q.prompt), el('p', {}, row.result.reflections?.[q.id] || '(미작성)')))));

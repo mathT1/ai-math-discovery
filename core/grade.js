@@ -59,8 +59,8 @@ function csvCell(v) {
   if (v === null || v === undefined) return '';
   if (typeof v === 'number') return String(v);
   let s = String(v);
-  // 엑셀 수식 실행 방지: =, +, -, @ 로 시작하는 글자는 앞에 ' 를 붙임
-  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  // 엑셀 수식 실행 방지: (공백·줄바꿈 뒤라도) =, +, -, @ 로 시작하거나 탭·CR로 시작하면 앞에 ' 를 붙임
+  if (/^\s*[=+\-@]|^[\t\r]/.test(s)) s = "'" + s;
   return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
 

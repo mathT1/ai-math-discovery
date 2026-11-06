@@ -79,6 +79,8 @@ test('validate: 형식 검사', () => {
   assert.ok(validate(tplSchema, { n: 1.5, answer: 1 }).length);     // 정수 아님
   assert.ok(validate(tplSchema, { n: 1 }).length);                  // 필수 빠짐
   assert.ok(validate(tplSchema, { n: 1, answer: 1, x: 1 }).length); // 모르는 항목
+  assert.ok(validate(tplSchema, { n: NaN, answer: 1 }).length);     // NaN 막기 (Antigravity M1)
+  assert.ok(validate({ type: 'number' }, Infinity).length);
 });
 
 test('validateResult: 겉포장 + payload', async () => {
@@ -145,6 +147,9 @@ test('toCSV: BOM, 따옴표, 엑셀 수식 막기', () => {
   assert.ok(csv.includes('"김""철수"'));
   assert.ok(csv.includes('"줄\n바꿈"'));
   assert.ok(csv.includes('박,-3'));
+  const ws = toCSV([[' =1+1'], ['\n@SUM(A1)']]); // 공백·줄바꿈 뒤 수식 (Antigravity M1)
+  assert.ok(ws.includes("' =1+1"));
+  assert.ok(ws.includes(`"'\n@SUM(A1)"`));
 });
 
 test('maxTotal', () => assert.equal(maxTotal(tplRubric), 100));

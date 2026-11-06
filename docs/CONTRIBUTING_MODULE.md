@@ -34,12 +34,13 @@
 | `status` | ✔ | `draft`(홈에 안 보임, `?drafts` 로 보임) / `published` |
 | `title`, `subtitle` | ✔ / | 카드·화면 제목 |
 | `subject`, `unit`, `topics` | ✔ | 홈 필터에 쓰임 |
-| `achievement_standards` | ✔ | `{code, description, source}` 목록. **확정 코드는 `source`(문서명·쪽) 필수** — 없으면 검사가 실패함. 확인 전에는 `code: "후보(확인 필요)"` |
+| `achievement_standards` | ✔ | `{code, description, source}` 목록. `code`는 대괄호 없이 코드만(예: `10공수2-01-02`). **"후보"로 시작하지 않는 코드는 `source`(문서명·쪽) 필수** — 없거나 코드 모양이 틀리면 검사 실패. 확인 전에는 `code: "후보(확인 필요)"` |
 | `grade`, `periods`, `difficulty` | ✔ | 학년 목록, 차시 수, 난이도 1~3 |
 | `paper` | ✔ | `title, authors, year, url, code, ai_method, license_note` |
 | `story` | | `hook`(도입 질문), `ai_connection`(연구 이야기). `$수식$` 사용 가능 |
 | `questions` | ✔ | 정리 질문 `{id, type:"text", prompt}` 목록 |
 | `data` | | `{"이름": "data/파일.json"}` — 화면이 불러와 `activity.js` 에 넘겨 줌 |
+| `style` | | 모듈 전용 CSS 파일 (예: `"activity.css"`). 화면이 자동으로 불러옴. 색은 `core/ui.css`의 변수(`var(--primary)` 등)를 쓰면 어두운 화면에서도 맞음 |
 
 **화면에 쓰는 사실은 `docs/FACT_SOURCES.md`(또는 `guide.md` 사실–출처 표)에 출처가 있는 것만 씁니다.**
 
