@@ -1,0 +1,2 @@
+KaTeX 0.16.11 (https://katex.org), MIT License.
+npm 패키지 katex@0.16.11의 dist에서 katex.min.js, katex.min.css, contrib/auto-render.min.js, fonts/*.woff2만 복사함.

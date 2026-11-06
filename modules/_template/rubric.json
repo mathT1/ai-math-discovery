@@ -1,0 +1,10 @@
+{
+  "scale": ["A", "B", "C", "D", "E"],
+  "level_cut": { "A": 90, "B": 80, "C": 70, "D": 60 },
+  "items": [
+    { "id": "correct", "label": "합 계산", "type": "auto", "metric": "correct", "max": 40,
+      "tiers": [{ "eq": 1, "score": 40 }] },
+    { "id": "q1", "label": "방법 설명", "type": "teacher", "question": "q1", "max": 60,
+      "levels": { "60": "짝짓기 등 일반적인 방법을 n으로 설명", "40": "특정 n에서만 설명", "20": "계산 과정만 나열", "0": "미작성" } }
+  ]
+}

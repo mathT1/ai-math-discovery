@@ -172,3 +172,19 @@
 | 역할 | 개발: Claude / 검토: Antigravity (마일스톤 M0~M4 끝마다) |
 | 전달 방법 | Claude가 `docs/handoff/to_antigravity_NN_*.md` 작성 → 요청자가 Antigravity에 전달 → Antigravity는 `docs/reviews/review_M*_by_antigravity.md`에만 작성 → Claude가 반영 |
 | 이유 | 두 에이전트는 직접 대화할 수 없고, 같은 파일을 동시에 고치면 충돌함. 교차 검토는 계획 단계에서 실제 오류를 찾아냄(예시 데이터 오류, 저자 오기, 구조 중복) |
+
+---
+
+## 11. Antigravity M0 검토 반영 (Claude · 2026-11-06)
+
+`reviews/review_M0_by_antigravity.md` 의 제안 5건을 모두 수용함.
+
+| 제안 | 반영 |
+|---|---|
+| N1에 "서로 다른 세 점" 전제 | FACT_SOURCES N1 수정 |
+| 금지 문장 2건 (스트라센 2×2 한 번은 더 빠르다 / AI가 고전보다 큰 격자) | FACT_SOURCES 5절 추가, 덧셈 18번 직접 세어 M12로 추가 |
+| 제출 코드 `[모듈:반-번호:코드]` 형식 | `core/codec.js` 구현, 테스트로 "글에 섞인 코드 2개 추출" 확인 |
+| 인쇄 배경색 문제 | 보고서를 그림으로 인쇄 + `print-color-adjust: exact` |
+| FINAL_PLAN M4/M5 표기 불일치 | Claude 실수. M4로 통일 |
+| `pages.yml`에서 `.gitignore` 제외 | `.gitattributes`까지 제외 |
+| 서지 3건 (Strassen, Winograd, Guy–Kelly) | FACT_SOURCES에 기록. Strassen은 ✅, Winograd·Guy–Kelly는 본문 미열람이라 ⚠️ 유지 |

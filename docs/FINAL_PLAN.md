@@ -39,7 +39,7 @@
 | 모듈 목록 | `tools/build-index.mjs`가 배포 때 `modules/index.json` 자동 생성 [D5] | 정적 사이트는 폴더를 못 읽음. 폴더 추가만으로 반영(R6) |
 | 체크섬 | Web Crypto SHA-256 [D14] | 브라우저 내장, 라이브러리 없음 |
 | 제출 코드 | 브라우저 내장 `CompressionStream` + Base64 [D20] | 라이브러리 없음 |
-| 오프라인 | 버전 이름을 붙인 Service Worker 캐시, M5에 적용 [D17] | `file://`에서는 ES 모듈·fetch가 막혀 zip 실행 불가 |
+| 오프라인 | 버전 이름을 붙인 Service Worker 캐시, M4에 적용 [D17] | `file://`에서는 ES 모듈·fetch가 막혀 zip 실행 불가 |
 | 외부 스크립트 | 없음 (분석·광고·외부 폰트 금지) | BRIEF 5-2 |
 
 ---
@@ -68,7 +68,7 @@
   tools/
     build-index.mjs           # index.json 생성 + 모듈 표준 검사
   tests/                      # node --test (수학 판정, data/ 검증)
-  sw.js                       # Service Worker (M5)
+  sw.js                       # Service Worker (M4)
   sandbox/                    # 실험용, 배포 제외
   .github/workflows/pages.yml
   docs/                       # 계획 문서, CONTRIBUTING_MODULE.md, EXHIBITION_KIT.md
@@ -199,6 +199,19 @@ export function metrics(payload) {
 - 교사 항목은 자동으로 점수를 주지 않습니다. "작성/미작성" 표시만 합니다 [D11].
 - `level_cut` 값은 예시이며, U3 결정 후 확정합니다.
 
+### 4-6. M1 구현에서 정한 세부 규칙 (2026-11-06)
+
+| 항목 | 정한 내용 | 이유 |
+|---|---|---|
+| `level_cut` | **백분율**(총점÷만점×100) 기준 | 모듈마다 만점이 달라도 같은 기준을 쓸 수 있음 |
+| 모듈 파일 이름 | `activity.js`, `grader.js`, `schema.json`, `rubric.json`, `guide.md` 고정. BRIEF 초안의 `output_schema`·`rubric`·`teacher_guide` 필드는 쓰지 않음 | 필드와 실제 파일이 어긋날 일이 없음 |
+| `module.json` `data` | `{"이름": "data/파일.json"}` — 쉘이 불러와 `activity.js`에 넘김 | 모듈이 데이터 로딩 코드를 따로 쓰지 않음 |
+| `init` 넷째 인자 | `ctx = { saved, onChange }` — 당일 기록 복원과 자동 저장 | D8의 함수 4개는 그대로, 복원 기능만 추가 |
+| 제출 코드 | `[모듈id:반-번호:gzip+base64url]` | Antigravity M0 검토: 패들릿에서 반·번호가 보이고, 글에 섞여도 추출 가능 |
+| 인쇄 | 보고서 PNG를 그림으로 인쇄 + `print-color-adjust: exact` | Antigravity M0 검토: 배경색이 빠지는 문제 방지 |
+| CSV | 글자 앞 `= + - @`에 `'` 붙임 | 학생 답이 엑셀 수식으로 실행되는 것 방지 |
+| 성취기준 검사 | 확정 코드 모양인데 `source`가 없으면 `build-index`가 실패 | D21을 자동으로 지킴 |
+
 ---
 
 ## 5. 결과물 다운로드 형식과 평가 흐름
@@ -249,7 +262,7 @@ PNG 보고서 내용: 학생 정보, 활동 그림, 핵심 수치(다시 계산�
 | 샘플 학급 데이터 | 다국어 |
 | `_template`, `CONTRIBUTING_MODULE.md` | 통계 차트 |
 | Actions 자동 검사·배포 | |
-| Service Worker 오프라인 (M5) | |
+| Service Worker 오프라인 (M4) | |
 
 ---
 

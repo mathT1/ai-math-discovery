@@ -7,7 +7,7 @@ AI가 수학 난제를 탐구한 실제 연구 논문을 바탕으로 만든, �
 - 교사는 평가 페이지에서 결과물을 한꺼번에 채점하고 CSV로 내려받음
 - 학생 정보는 어디에도 전송·저장하지 않음 (모든 처리는 각자의 브라우저 안에서)
 
-> 현재 상태: **개발 중 (M0 준비 단계)**. 계획은 [`docs/FINAL_PLAN.md`](docs/FINAL_PLAN.md) 참고.
+> 현재 상태: **개발 중 (M1 본체 완성, 모듈은 M2부터)**. 계획은 [`docs/FINAL_PLAN.md`](docs/FINAL_PLAN.md) 참고.
 
 ## 첫 버전 모듈 (예정)
 
@@ -16,9 +16,22 @@ AI가 수학 난제를 탐구한 실제 연구 논문을 바탕으로 만든, �
 | 세 점이 한 직선 위에 놓이지 않게 | 공통수학2 도형의 방정식 | [arXiv:2512.11469](https://arxiv.org/abs/2512.11469) |
 | 행렬 곱셈 횟수 줄이기 | 공통수학1 행렬 | [AlphaTensor, Nature 2022](https://www.nature.com/articles/s41586-022-05172-4) |
 
+## 내 컴퓨터에서 미리보기
+
+Node.js 22 이상이 필요합니다(설치할 패키지는 없음).
+
+```bash
+node tools/serve.mjs            # http://localhost:8000  (만드는 중 모듈까지: /?drafts)
+node tools/build-index.mjs      # 모듈 목록 생성 + 표준 검사
+node --test "tests/*.test.mjs"  # 단위 테스트
+node tests/e2e-browser.mjs      # 브라우저 종단 테스트 (Chrome, 미리보기 서버 실행 중일 때)
+```
+
+파일을 더블클릭해 열면 브라우저 보안 규칙 때문에 동작하지 않습니다.
+
 ## 새 모듈 추가
 
-`modules/_template/`을 복사해 폴더 하나와 `module.json`을 추가하면 목록·평가에 자동 반영됩니다. 자세한 방법은 `docs/CONTRIBUTING_MODULE.md` (M1에서 작성)를 참고하세요.
+`modules/_template/`을 복사해 폴더 하나를 추가하면 목록·평가에 자동 반영됩니다. 자세한 방법은 [`docs/CONTRIBUTING_MODULE.md`](docs/CONTRIBUTING_MODULE.md)를 참고하세요.
 
 ## 라이선스
 

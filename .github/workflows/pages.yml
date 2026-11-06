@@ -32,7 +32,7 @@ jobs:
 
       - name: 수학 판정·데이터 테스트
         run: |
-          if [ -d tests ]; then node --test tests/; else echo "tests 없음 (M1 전)"; fi
+          if [ -d tests ]; then node --test "tests/*.test.mjs"; else echo "tests 없음 (M1 전)"; fi
 
       - name: 배포 파일 모으기 (문서·실험·도구 제외)
         run: |
@@ -40,7 +40,8 @@ jobs:
           rsync -a ./ _site/ \
             --exclude '.git' --exclude '.github' --exclude '_site' \
             --exclude 'docs' --exclude 'sandbox' --exclude 'tools' --exclude 'tests' \
-            --exclude '*.pdf' --exclude 'CLAUDE.md' --exclude 'AGENTS.md'
+            --exclude '*.pdf' --exclude 'CLAUDE.md' --exclude 'AGENTS.md' \
+            --exclude '.gitignore' --exclude '.gitattributes'
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

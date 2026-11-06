@@ -1,0 +1,36 @@
+{
+  "id": "_template",
+  "version": "0.1.0",
+  "status": "draft",
+  "title": "[견본] 1부터 n까지의 합",
+  "subtitle": "새 모듈을 만들 때 복사해서 쓰는 견본 모듈",
+  "subject": "견본",
+  "unit": "견본",
+  "topics": ["견본", "수열의 합"],
+  "achievement_standards": [
+    { "code": "후보(확인 필요)", "description": "견본입니다. 실제 모듈에서는 출처(source)를 적은 확인된 코드만 씁니다.", "source": "" }
+  ],
+  "grade": ["고1"],
+  "periods": 1,
+  "difficulty": 1,
+  "paper": {
+    "title": "(견본) 논문 제목",
+    "authors": "(견본) 저자",
+    "year": 2026,
+    "url": "https://arxiv.org/",
+    "code": "",
+    "ai_method": "(견본) 방법 설명",
+    "license_note": "견본 데이터는 직접 만든 것"
+  },
+  "story": {
+    "hook": "1부터 100까지 더하면 얼마일까요? 하나씩 더하지 않고 구할 수 있을까요?",
+    "ai_connection": "견본 문장입니다. 실제 모듈에서는 docs/FACT_SOURCES.md(또는 guide.md의 사실–출처 표)에 있는 문장만 씁니다. 수식 예: $1+2+\\cdots+n = \\dfrac{n(n+1)}{2}$"
+  },
+  "questions": [
+    { "id": "q1", "type": "text", "prompt": "1부터 n까지의 합을 빠르게 구하는 방법을 설명하시오." }
+  ],
+  "data": {
+    "example": "data/example.json"
+  },
+  "authors": ["동규"]
+}

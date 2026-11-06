@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "required": ["n", "answer"],
+  "additionalProperties": false,
+  "properties": {
+    "n": { "type": "integer", "minimum": 1, "maximum": 100 },
+    "answer": { "type": ["integer", "null"] }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "generated_by": "tools/build-index.mjs — 직접 고치지 마세요",
+  "modules": [
+    {
+      "id": "_template",
+      "status": "draft",
+      "version": "0.1.0",
+      "title": "[견본] 1부터 n까지의 합",
+      "subtitle": "새 모듈을 만들 때 복사해서 쓰는 견본 모듈",
+      "subject": "견본",
+      "unit": "견본",
+      "topics": [
+        "견본",
+        "수열의 합"
+      ],
+      "grade": [
+        "고1"
+      ],
+      "periods": 1,
+      "difficulty": 1
+    }
+  ]
+}

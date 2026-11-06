@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>교사용 지도안</title>
+  <link rel="stylesheet" href="core/ui.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p><a href="index.html">← 모든 활동</a> · <a href="teacher.html">교사용 평가 페이지</a></p>
+      <h1 id="guide-title">교사용 지도안</h1>
+    </div>
+  </header>
+  <main class="wrap">
+    <article id="guide" class="card prose">불러오는 중…</article>
+  </main>
+  <script type="module">
+    import { fetchJSON, fetchText, showFatal } from './core/ui.js';
+    import { markdownToHTML } from './core/markdown.js';
+    import { renderMath } from './core/math.js';
+    import { moduleURL } from './core/catalog.js';
+    const box = document.getElementById('guide');
+    const id = new URLSearchParams(location.search).get('id') ?? '';
+    try {
+      if (!/^[a-z0-9_-]+$/.test(id)) throw new Error('모듈 이름이 올바르지 않습니다.');
+      const meta = await fetchJSON(moduleURL(id, 'module.json'));
+      document.title = `${meta.title} · 지도안`;
+      document.getElementById('guide-title').textContent = `${meta.title} — 교사용 지도안`;
+      box.innerHTML = markdownToHTML(await fetchText(moduleURL(id, 'guide.md')));
+      renderMath(box);
+    } catch (e) { showFatal(box, e); }
+  </script>
+</body>
+</html>

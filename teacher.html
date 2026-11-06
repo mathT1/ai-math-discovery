@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>교사용 평가 페이지 · AI 수학 발견</title>
+  <link rel="stylesheet" href="core/ui.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p><a href="index.html">← 모든 활동</a></p>
+      <h1>교사용 평가 페이지</h1>
+      <p class="subtitle">학생 결과물을 모아 채점하고 CSV로 내려받습니다. 모든 처리는 이 브라우저 안에서만 이루어지며, 어떤 파일도 서버로 전송되지 않습니다.</p>
+    </div>
+  </header>
+  <main class="wrap">
+    <section id="setup" class="card">
+      <div class="field"><label for="module-select">1. 모듈 선택</label><select id="module-select"></select></div>
+      <div id="rubric-info"></div>
+    </section>
+
+    <div id="workspace" hidden>
+      <section class="card">
+        <h2>2. 결과물 불러오기</h2>
+        <div class="input-grid">
+          <div>
+            <h3>구글 클래스룸 · 메일 (JSON 파일)</h3>
+            <div id="drop" class="dropzone" tabindex="0" role="button" aria-label="JSON 파일 고르기 또는 끌어다 놓기">
+              JSON 파일을 여기로 끌어다 놓거나 눌러서 고르세요<br><span class="muted small">여러 개 한꺼번에 가능 · 클래스룸 압축 파일은 먼저 압축을 푸세요</span>
+            </div>
+            <input id="file-input" type="file" accept=".json,application/json" multiple hidden>
+          </div>
+          <div>
+            <h3>패들릿 (제출 코드)</h3>
+            <label for="code-input" class="muted small">게시물 내용을 통째로 복사해 붙여 넣어도 코드만 찾아 읽습니다.</label>
+            <textarea id="code-input" rows="5" placeholder="[모듈:반-번호:코드] …"></textarea>
+            <button id="code-read" class="btn primary" type="button">코드 읽기</button>
+          </div>
+          <div>
+            <h3>출력물 (수기 입력)</h3>
+            <form id="manual-form" class="manual-form">
+              <div class="field-row">
+                <div class="field"><label for="m-cls">반</label><input id="m-cls" name="cls" placeholder="1-5"></div>
+                <div class="field"><label for="m-num">번호</label><input id="m-num" name="number" type="number" min="1" max="99"></div>
+              </div>
+              <div class="field"><label for="m-name">이름 (선택)</label><input id="m-name" name="name"></div>
+              <button class="btn primary" type="submit">학생 추가</button>
+              <p class="muted small">추가한 뒤 표에서 모든 항목을 직접 채점합니다.</p>
+            </form>
+          </div>
+        </div>
+        <p><button id="sample-load" class="btn ghost" type="button">샘플 학급 불러오기 (연수·시연용)</button></p>
+      </section>
+
+      <section class="card">
+        <div class="table-head">
+          <h2>3. 채점</h2>
+          <span id="stats" class="muted small" aria-live="polite"></span>
+          <span class="grow"></span>
+          <button id="clear" class="btn ghost" type="button">표 비우기</button>
+          <button id="csv" class="btn primary" type="button">CSV 내려받기 (엑셀)</button>
+        </div>
+        <p class="muted small">자동 항목은 학생이 낸 원자료(점 좌표·식 등)로 다시 계산한 점수입니다. 칸에 마우스를 올리면 근거가 보입니다. 교사 항목은 [답 보기]로 답을 읽고 점수를 고르세요.</p>
+        <div id="table-wrap" class="table-wrap"></div>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="core/teacher.js"></script>
+</body>
+</html>
